@@ -2,7 +2,7 @@
 
 namespace Sistemas_de_Turnos_Medico.Models
 {
-    public class Turno
+    public class Cita
     {
         [Key] public int Id { get; set; }
 
@@ -15,7 +15,9 @@ namespace Sistemas_de_Turnos_Medico.Models
         public DateTime Hora { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
         public Doctor Doctor { get; set; }
+
+        [Required]
+        public Paciente Paciente { get; set; }
     }
 }

@@ -11,8 +11,9 @@ namespace Sistemas_de_Turnos_Medico.Data
         {
         }
 
+        public DbSet<Cita> Citas { get; set; }
+        public DbSet<Paciente> Pacientes { get; set; }
         public DbSet<Doctor> Doctores { get; set; }
-        public DbSet<Turno> Turnos { get; set; }
         public DbSet<Especializacion> Especializaciones { get; set; }
     }
 }

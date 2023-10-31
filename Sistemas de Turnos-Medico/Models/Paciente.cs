@@ -2,15 +2,18 @@
 
 namespace Sistemas_de_Turnos_Medico.Models
 {
-    public class Doctor
+    public class Paciente
     {
         [Key] public int Id { get; set; }
 
         [Required]
         public string Nombre { get; set; }
-        
+
         [Required]
         public string Apellido { get; set; }
+
+        [Required]
+        public int DNI { get; set; }
 
         [Required]
         [DataType(DataType.PhoneNumber)]
@@ -18,11 +21,6 @@ namespace Sistemas_de_Turnos_Medico.Models
 
         public string? Foto { get; set; }
 
-        [Required]
-        public int EspecializacionId { get; set; }
-
-        [Required]
-        [Display(Name = "Especialización")]
-        public Especializacion Especializacion { get; set; }
+        public List<Cita>? citas { get; set; }
     }
 }

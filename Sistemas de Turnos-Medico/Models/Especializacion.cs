@@ -9,6 +9,10 @@ namespace Sistemas_de_Turnos_Medico.Models
         [Required]
         public string Nombre { get; set; }
 
+        [Required]
+        [Display(Name = "Descripción")]
+        public string Descripcion { get; set; }
+
         public List<Doctor>? Doctores { get; set; }
     }
 }

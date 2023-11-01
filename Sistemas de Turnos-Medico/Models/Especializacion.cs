@@ -11,7 +11,7 @@ namespace Sistemas_de_Turnos_Medico.Models
         public string Nombre { get; set; }
 
         [Display(Name = "Descripción")]
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
 
         public List<Doctor>? Doctores { get; set; }
     }

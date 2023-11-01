@@ -25,11 +25,31 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Especializaciones" asp-action="Index">Especializaciónes</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Doctores" asp-action="Index">Doctores</a>
+                        </li>*@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="DropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Doctores
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="DropdownMenu">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Doctores" asp-action="Index">Doctores</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Doctores" asp-action="Create">Crear nuevo Doctor</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Especializaciones" asp-action="Index">
+                                        Especializaciónes
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Especializaciones" asp-action="Create">
+                                        Crear nueva Especialización
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

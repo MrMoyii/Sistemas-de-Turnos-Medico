@@ -7,9 +7,9 @@ namespace Sistemas_de_Turnos_Medico.Models
         [Key] public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Nombre")]
         public string Nombre { get; set; }
 
-        [Required]
         [Display(Name = "Descripción")]
         public string Descripcion { get; set; }
 

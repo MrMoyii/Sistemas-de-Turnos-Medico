@@ -12,17 +12,15 @@ namespace Sistemas_de_Turnos_Medico.Models
         [Required]
         public string Apellido { get; set; }
 
-        [Required]
         [DataType(DataType.PhoneNumber)]
-        public int Celular { get; set; }
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "No es un número de teléfono válido")]
+        public string Celular { get; set; }
 
         public string? Foto { get; set; }
 
-        [Required]
         public int EspecializacionId { get; set; }
 
-        [Required]
         [Display(Name = "Especialización")]
-        public Especializacion Especializacion { get; set; }
+        public Especializacion? Especializacion { get; set; }
     }
 }

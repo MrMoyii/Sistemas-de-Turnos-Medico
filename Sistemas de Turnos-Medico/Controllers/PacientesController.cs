@@ -13,10 +13,12 @@ namespace Sistemas_de_Turnos_Medico.Controllers
     public class PacientesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public PacientesController(ApplicationDbContext context)
+        public PacientesController(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: Pacientes
@@ -60,6 +62,8 @@ namespace Sistemas_de_Turnos_Medico.Controllers
         {
             if (ModelState.IsValid)
             {
+                paciente.Foto = cargarFoto("");
+
                 _context.Add(paciente);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -158,6 +162,33 @@ namespace Sistemas_de_Turnos_Medico.Controllers
         private bool PacienteExists(int id)
         {
           return (_context.Pacientes?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private string cargarFoto(string fotoAnterior)
+        {
+            var archivos = HttpContext.Request.Form.Files;
+            if (archivos != null && archivos.Count > 0)
+            {
+                var archivoFoto = archivos[0];
+                if (archivoFoto.Length > 0)
+                {
+                    var pathDestino = Path.Combine(_env.WebRootPath, "fotos");
+
+                    fotoAnterior = Path.Combine(pathDestino, fotoAnterior);
+                    if (System.IO.File.Exists(fotoAnterior))
+                        System.IO.File.Delete(fotoAnterior);
+
+                    var archivoDestino = Guid.NewGuid().ToString().Replace("-", "");
+                    archivoDestino += Path.GetExtension(archivoFoto.FileName);
+
+                    using (var filestream = new FileStream(Path.Combine(pathDestino, archivoDestino), FileMode.Create))
+                    {
+                        archivoFoto.CopyTo(filestream);
+                        return archivoDestino;
+                    };
+                }
+            }
+            return "";
         }
     }
 }

@@ -15,9 +15,9 @@ namespace Sistemas_de_Turnos_Medico.Models
         [Required]
         public int DNI { get; set; }
 
-        [Required]
         [DataType(DataType.PhoneNumber)]
-        public int Celular { get; set; }
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "No es un número de teléfono válido")]
+        public string Celular { get; set; }
 
         public string? Foto { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -103,6 +104,12 @@ namespace Sistemas_de_Turnos_Medico.Controllers
             {
                 try
                 {
+                    string nuevaFoto =
+                    cargarFoto(string.IsNullOrEmpty(paciente.Foto) ? "" : paciente.Foto);
+
+                    if (!string.IsNullOrEmpty(nuevaFoto))
+                        paciente.Foto = nuevaFoto;
+
                     _context.Update(paciente);
                     await _context.SaveChangesAsync();
                 }

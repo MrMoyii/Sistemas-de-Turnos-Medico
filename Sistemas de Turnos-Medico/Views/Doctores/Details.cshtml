@@ -32,7 +32,10 @@
             @Html.DisplayNameFor(model => model.Foto)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Foto)
+            @if (!string.IsNullOrEmpty(Model.Foto))
+            {
+                <img src="~/fotos/@Model.Foto" class="rounded-circle" style="max-width:50px" />
+            }
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Especializacion)

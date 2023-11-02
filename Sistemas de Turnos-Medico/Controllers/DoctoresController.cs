@@ -13,10 +13,12 @@ namespace Sistemas_de_Turnos_Medico.Controllers
     public class DoctoresController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public DoctoresController(ApplicationDbContext context)
+        public DoctoresController(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: Doctores
@@ -61,6 +63,8 @@ namespace Sistemas_de_Turnos_Medico.Controllers
         {
             if (ModelState.IsValid)
             {
+                doctor.Foto = cargarFoto("");
+
                 _context.Add(doctor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -102,6 +106,12 @@ namespace Sistemas_de_Turnos_Medico.Controllers
             {
                 try
                 {
+                    string nuevaFoto =
+                        cargarFoto(string.IsNullOrEmpty(doctor.Foto) ? "" : doctor.Foto);
+
+                    if (!string.IsNullOrEmpty(nuevaFoto))
+                        doctor.Foto = nuevaFoto;
+
                     _context.Update(doctor);
                     await _context.SaveChangesAsync();
                 }
@@ -163,6 +173,33 @@ namespace Sistemas_de_Turnos_Medico.Controllers
         private bool DoctorExists(int id)
         {
           return (_context.Doctores?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private string cargarFoto(string fotoAnterior)
+        {
+            var archivos = HttpContext.Request.Form.Files;
+            if (archivos != null && archivos.Count > 0)
+            {
+                var archivoFoto = archivos[0];
+                if (archivoFoto.Length > 0)
+                {
+                    var pathDestino = Path.Combine(_env.WebRootPath, "fotos");
+
+                    fotoAnterior = Path.Combine(pathDestino, fotoAnterior);
+                    if (System.IO.File.Exists(fotoAnterior))
+                        System.IO.File.Delete(fotoAnterior);
+
+                    var archivoDestino = Guid.NewGuid().ToString().Replace("-", "");
+                    archivoDestino += Path.GetExtension(archivoFoto.FileName);
+
+                    using (var filestream = new FileStream(Path.Combine(pathDestino, archivoDestino), FileMode.Create))
+                    {
+                        archivoFoto.CopyTo(filestream);
+                        return archivoDestino;
+                    };
+                }
+            }
+            return "";
         }
     }
 }

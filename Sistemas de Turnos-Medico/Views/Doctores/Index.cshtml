@@ -43,7 +43,10 @@
                 @Html.DisplayFor(modelItem => item.Celular)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Foto)
+                @if (!string.IsNullOrEmpty(item.Foto))
+                {
+                    <img src="~/fotos/@item.Foto" class="rounded-circle" style="max-width:50px" />
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Especializacion.Nombre)

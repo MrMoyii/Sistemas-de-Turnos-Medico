@@ -8,7 +8,7 @@ using Sistemas_de_Turnos_Medico.Data;
 
 #nullable disable
 
-namespace Sistemas_de_Turnos_Medico.Data.Migrations
+namespace Sistemas_de_Turnos_Medico.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

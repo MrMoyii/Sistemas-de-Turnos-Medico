@@ -50,9 +50,9 @@ namespace Sistemas_de_Turnos_Medico.Controllers
         // GET: Citas/Create
         public IActionResult Create()
         {
-            ViewData["DoctorId"] = new SelectList(_context.Doctores, "Id", "Apellido");
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Descripcion");
-            ViewData["PacienteId"] = new SelectList(_context.Pacientes, "Id", "Apellido");
+            ViewData["Doctor"] = ListDoctores(-1);
+            ViewData["Paciente"] = ListPacientes(-1);
+            ViewData["Estado"] = new SelectList(_context.Estados, "Id", "Descripcion");
             return View();
         }
 
@@ -69,9 +69,9 @@ namespace Sistemas_de_Turnos_Medico.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoctorId"] = new SelectList(_context.Doctores, "Id", "Apellido", cita.DoctorId);
+            ViewData["DoctorId"] = ListDoctores(cita.DoctorId);
             ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Descripcion", cita.EstadoId);
-            ViewData["PacienteId"] = new SelectList(_context.Pacientes, "Id", "Apellido", cita.PacienteId);
+            ViewData["PacienteId"] = ListPacientes(cita.PacienteId);
             return View(cita);
         }
 
@@ -88,9 +88,9 @@ namespace Sistemas_de_Turnos_Medico.Controllers
             {
                 return NotFound();
             }
-            ViewData["DoctorId"] = new SelectList(_context.Doctores, "Id", "Apellido", cita.DoctorId);
+            ViewData["DoctorId"] = ListDoctores(cita.DoctorId);
             ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Descripcion", cita.EstadoId);
-            ViewData["PacienteId"] = new SelectList(_context.Pacientes, "Id", "Apellido", cita.PacienteId);
+            ViewData["PacienteId"] = ListPacientes(cita.PacienteId);
             return View(cita);
         }
 
@@ -126,9 +126,9 @@ namespace Sistemas_de_Turnos_Medico.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoctorId"] = new SelectList(_context.Doctores, "Id", "Apellido", cita.DoctorId);
+            ViewData["DoctorId"] = ListDoctores(cita.DoctorId);
             ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Descripcion", cita.EstadoId);
-            ViewData["PacienteId"] = new SelectList(_context.Pacientes, "Id", "Apellido", cita.PacienteId);
+            ViewData["PacienteId"] = ListPacientes(cita.PacienteId);
             return View(cita);
         }
 
@@ -176,5 +176,37 @@ namespace Sistemas_de_Turnos_Medico.Controllers
         {
           return (_context.Citas?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        #region Tools
+        private SelectList ListDoctores(int citaId)
+        {
+            List<Doctor> listaDoctores = _context.Doctores.Include(m => m.Especializacion).ToList();
+
+            List<SelectListItem> selectListItems = listaDoctores.Select(m => new SelectListItem
+            {
+                Text = m.Nombre + " " + m.Apellido + " - " + m.Especializacion.Nombre,
+                Value = m.Id.ToString()
+            }).ToList();
+            if (citaId == -1)
+                return new SelectList(selectListItems, "Value", "Text");
+
+            return new SelectList(selectListItems, "Value", "Text", citaId);
+        }
+        private SelectList ListPacientes(int citaId)
+        {
+            List<Paciente> listaDePacientes = _context.Pacientes.ToList();
+
+            List<SelectListItem> selectListItems = listaDePacientes.Select(m => new SelectListItem
+            {
+                Text = m.Nombre + " " + m.Apellido,
+                Value = m.Id.ToString()
+            }).ToList();
+
+            if (citaId == -1)
+                return new SelectList(selectListItems, "Value", "Text");
+
+            return new SelectList(selectListItems, "Value", "Text", citaId);
+        }
+        #endregion
     }
 }

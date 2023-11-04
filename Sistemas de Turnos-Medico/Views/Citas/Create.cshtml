@@ -23,16 +23,16 @@
                 <span asp-validation-for="Hora" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EstadoId" class="control-label"></label>
-                <select asp-for="EstadoId" class ="form-control" asp-items="ViewBag.EstadoId"></select>
+                <label class="control-label">Estado</label>
+                <select asp-for="EstadoId" class ="form-control" asp-items="ViewBag.Estado"></select>
             </div>
             <div class="form-group">
-                <label asp-for="DoctorId" class="control-label"></label>
-                <select asp-for="DoctorId" class ="form-control" asp-items="ViewBag.DoctorId"></select>
+                <label class="control-label">Doctor</label>
+                <select asp-for="DoctorId" class="form-control" asp-items="ViewBag.Doctor"></select>
             </div>
             <div class="form-group">
-                <label asp-for="PacienteId" class="control-label"></label>
-                <select asp-for="PacienteId" class ="form-control" asp-items="ViewBag.PacienteId"></select>
+                <label class="control-label">Paciente</label>
+                <select asp-for="PacienteId" class ="form-control" asp-items="ViewBag.Paciente"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

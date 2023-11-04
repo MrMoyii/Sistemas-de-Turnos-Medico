@@ -43,9 +43,11 @@
                 @Html.DisplayFor(modelItem => item.Estado.Descripcion)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Doctor.Nombre) 
                 @Html.DisplayFor(modelItem => item.Doctor.Apellido)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Paciente.Nombre) 
                 @Html.DisplayFor(modelItem => item.Paciente.Apellido)
             </td>
             <td>

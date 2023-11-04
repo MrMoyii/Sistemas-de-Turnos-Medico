@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sistemas_de_Turnos_Medico.Data;
 
@@ -11,9 +12,11 @@ using Sistemas_de_Turnos_Medico.Data;
 namespace Sistemas_de_Turnos_Medico.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231103030213_Estados-Citas")]
+    partial class EstadosCitas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,6 +280,9 @@ namespace Sistemas_de_Turnos_Medico.Migrations
                     b.Property<int>("EspecializacionId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("EstadoCitaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Foto")
                         .HasColumnType("nvarchar(max)");
 
@@ -287,6 +293,8 @@ namespace Sistemas_de_Turnos_Medico.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EspecializacionId");
+
+                    b.HasIndex("EstadoCitaId");
 
                     b.ToTable("Doctores");
                 });
@@ -419,7 +427,7 @@ namespace Sistemas_de_Turnos_Medico.Migrations
                         .IsRequired();
 
                     b.HasOne("Sistemas_de_Turnos_Medico.Models.EstadoCita", "Estado")
-                        .WithMany("Citas")
+                        .WithMany()
                         .HasForeignKey("EstadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -445,6 +453,10 @@ namespace Sistemas_de_Turnos_Medico.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Sistemas_de_Turnos_Medico.Models.EstadoCita", null)
+                        .WithMany("Doctores")
+                        .HasForeignKey("EstadoCitaId");
+
                     b.Navigation("Especializacion");
                 });
 
@@ -455,7 +467,7 @@ namespace Sistemas_de_Turnos_Medico.Migrations
 
             modelBuilder.Entity("Sistemas_de_Turnos_Medico.Models.EstadoCita", b =>
                 {
-                    b.Navigation("Citas");
+                    b.Navigation("Doctores");
                 });
 
             modelBuilder.Entity("Sistemas_de_Turnos_Medico.Models.Paciente", b =>

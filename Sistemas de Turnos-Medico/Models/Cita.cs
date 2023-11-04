@@ -14,10 +14,16 @@ namespace Sistemas_de_Turnos_Medico.Models
         [DataType(DataType.Time)]
         public DateTime Hora { get; set; }
 
-        [Required]
-        public Doctor Doctor { get; set; }
+        public int EstadoId { get; set; }
+        
+        public EstadoCita? Estado { get; set; }
 
-        [Required]
-        public Paciente Paciente { get; set; }
+        public int DoctorId { get; set; }
+
+        public Doctor? Doctor { get; set; }
+
+        public int PacienteId { get; set; }
+
+        public Paciente? Paciente { get; set; }
     }
 }

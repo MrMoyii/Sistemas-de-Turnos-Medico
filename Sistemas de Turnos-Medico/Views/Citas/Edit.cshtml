@@ -1,53 +1,66 @@
 ﻿@model Sistemas_de_Turnos_Medico.Models.Cita
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar";
 }
 
-<h1>Edit</h1>
+<div style="max-width: 450px; margin: auto;">
+    <form asp-action="Edit">
+        <h1>Editar</h1>
 
-<h4>Cita</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
+        <div class="border border-secondary border-3 rounded text-center" style="padding: 10px; margin: 10px">
+            <h4>Cita</h4>
+            <hr />
+            <div class="row" style="margin-bottom: 1rem;">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="input-group col" style="min-width: 16vw;">
+                    <span class="input-group-text" id="basic-addon1">Fecha</span>
+                    <input asp-for="Fecha" class="form-control" />
+                    <span asp-validation-for="Fecha" class="text-danger"></span>
+                </div>
+                <div class="input-group col" style="max-width: 40vw; min-width: 10vw;">
+                    <span class="input-group-text" id="basic-addon1">Hora</span>
+                    <input asp-for="Hora" class="form-control" />
+                    <span asp-validation-for="Hora" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Hora" class="control-label"></label>
-                <input asp-for="Hora" class="form-control" />
-                <span asp-validation-for="Hora" class="text-danger"></span>
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">Estado</span>
+                <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estado"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="EstadoId" class="control-label"></label>
-                <select asp-for="EstadoId" class="form-control" asp-items="ViewBag.EstadoId"></select>
-                <span asp-validation-for="EstadoId" class="text-danger"></span>
+            <div>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">Doctor</span>
+                    <select asp-for="DoctorId" class="form-select" asp-items="ViewBag.Doctor"></select>
+                    <a asp-area="" class="btn btn-outline-success" asp-controller="Doctores" asp-action="Create" title="Crear Nuevo">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </a>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">Paciente</span>
+                    <select asp-for="PacienteId" class="form-select" asp-items="ViewBag.Paciente"></select>
+                    <a asp-area="" class="btn btn-outline-success" asp-controller="Pacientes" asp-action="Create" title="Crear Nuevo">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </a>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DoctorId" class="control-label"></label>
-                <select asp-for="DoctorId" class="form-control" asp-items="ViewBag.DoctorId"></select>
-                <span asp-validation-for="DoctorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PacienteId" class="control-label"></label>
-                <select asp-for="PacienteId" class="form-control" asp-items="ViewBag.PacienteId"></select>
-                <span asp-validation-for="PacienteId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="d-flex justify-content-evenly">
+            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Editar</button>
+            <a asp-action="Index" class="btn btn-dark"><i class="bi bi-caret-left"></i> Regresar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    .input-group {
+        margin-top: 0.75rem;
+    }
+
+    .form-control {
+        text-align: center;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

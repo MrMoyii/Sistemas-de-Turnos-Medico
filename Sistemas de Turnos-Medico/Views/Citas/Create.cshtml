@@ -4,30 +4,31 @@
     ViewData["Title"] = "Create";
 }
 
-<div style="max-width: 400px; margin: auto;">
+<div style="max-width: 450px; margin: auto;">
     <form asp-action="Create">
         <h1>Crear</h1>
+
         <div class="border border-secondary border-3 rounded text-center" style="padding: 10px; margin: 10px">
             <h4>Cita</h4>
             <hr />
             <div class="row" style="margin-bottom: 1rem;">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col">
-                    <label asp-for="Fecha" class="control-label"></label>
+                <div class="input-group col" style="min-width: 16vw;">
+                    <span class="input-group-text" id="basic-addon1">Fecha</span>
                     <input asp-for="Fecha" class="form-control" />
                     <span asp-validation-for="Fecha" class="text-danger"></span>
                 </div>
-                <div class="form-group col">
-                    <label asp-for="Hora" class="control-label"></label>
+                <div class="input-group col" style="max-width: 40vw; min-width: 10vw;">
+                    <span class="input-group-text" id="basic-addon1">Hora</span>
                     <input asp-for="Hora" class="form-control" />
                     <span asp-validation-for="Hora" class="text-danger"></span>
                 </div>
-                
-                <div class="input-group">
-                    <span class="input-group-text" id="basic-addon1">Estado</span>
-                    <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estado"></select>
-                </div>
-
+            </div>
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">Estado</span>
+                <select asp-for="EstadoId" class="form-select" asp-items="ViewBag.Estado"></select>
+            </div>
+            <div>
                 <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">Doctor</span>
                     <select asp-for="DoctorId" class="form-select" asp-items="ViewBag.Doctor"></select>

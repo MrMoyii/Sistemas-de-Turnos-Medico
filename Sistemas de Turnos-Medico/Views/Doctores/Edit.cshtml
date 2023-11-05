@@ -1,56 +1,63 @@
 ﻿@model Sistemas_de_Turnos_Medico.Models.Doctor
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar";
 }
 
-<h1>Edit</h1>
+<div style="max-width: 450px; margin: auto;">
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <h1>Editar</h1>
 
-<h4>Doctor</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+        <div class="border border-secondary border-3 rounded text-center" style="padding: 10px; margin: 10px">
+            <h4>Doctor</h4>
+            <hr />
+            <div class="row" style="margin-bottom: 1rem;">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="input-group">
+                    <span class="input-group-text">Nombre y Apellido</span>
+                    <input asp-for="Nombre" type="text" aria-label="Nombre" class="form-control">
+                    <input asp-for="Apellido" type="text" aria-label="Apellido" class="form-control">
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Celular" class="control-label"></label>
-                <input asp-for="Celular" class="form-control" />
-                <span asp-validation-for="Celular" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Foto" />
+            <div>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">Celular</span>
+                    <input asp-for="Celular" class="form-control" style="text-align: start;" />
+                    <span asp-validation-for="Celular" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">Especializacion</span>
+                    <select asp-for="EspecializacionId" class="form-select" asp-items="ViewBag.EspecializacionId"></select>
+                    <span asp-validation-for="EspecializacionId" class="text-danger"></span>
+                </div>
+                <div class="input-group" sytle="margin-top: 10px;">
+                    <input type="hidden" asp-for="Foto" />
+                    <input class="form-control form-control-sm" type="file" id="foto" name="foto" accept="image/jpeg" style="max-height: 50px; margin: auto;" />
 
-                <img src="@(!string.IsNullOrEmpty(Model.Foto) ? "/fotos/"+Model.Foto : "")"
-                     class="rounded-circle" name="imagen" id="imagen" style="max-width:100px" />
-                <input type="file" id="foto" name="foto" accept="image/jpeg" />
-                <span asp-validation-for="Foto" class="text-danger"></span>
+                    @*<label for="formFile" class="form-label">Fotografía</label> *@
+                    <img src="@(!string.IsNullOrEmpty(Model.Foto) ? "/fotos/"+Model.Foto : "")"
+                         class="rounded-circle" name="imagen" id="imagen" style="max-width:100px;" />
+                    <span asp-validation-for="Foto" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="EspecializacionId" class="control-label"></label>
-                <select asp-for="EspecializacionId" class="form-control" asp-items="ViewBag.EspecializacionId"></select>
-                <span asp-validation-for="EspecializacionId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="d-flex justify-content-evenly">
+            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Editar</button>
+            <a asp-action="Index" class="btn btn-dark"><i class="bi bi-caret-left"></i> Regresar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    .input-group {
+        margin-top: 0.75rem;
+    }
+
+    .form-control {
+        text-align: center;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

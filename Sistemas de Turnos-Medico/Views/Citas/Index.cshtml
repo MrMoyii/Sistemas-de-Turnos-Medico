@@ -7,7 +7,7 @@
 <h1>Citas</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-success">Crear Nueva Cita</a>
+    <a asp-action="Create" class="btn btn-success" title="Crear nueva cita"><i class="bi bi-plus-circle"></i> Nueva Cita</a>
 </p>
 <table class="table text-center">
     <thead>
@@ -51,13 +51,13 @@
                 @Html.DisplayFor(modelItem => item.Paciente.Apellido)
             </td>
             <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm" title="Editar">
                         <i class="bi bi-pencil-square"></i>
                     </a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm" title="Detalles">
                         <i class="bi bi-card-text"></i>
                     </a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm eliminar">
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm eliminar" title="Borrar">
                         <i class="bi bi-trash-fill"></i>
                     </a>
             </td>

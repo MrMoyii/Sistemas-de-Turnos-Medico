@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sistema de Turnos Medico</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -25,32 +25,42 @@
                                 Citas
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="DropdownMenuCitas">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Citas" asp-action="Index">Citas</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Citas" asp-action="Create">Crear nueva Cita</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Citas" asp-action="Index">
+                                        <i class="bi bi-card-list"></i> Citas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Citas" asp-action="Create">
+                                        <i class="bi bi-plus"></i> Nueva Cita
+                                    </a>
+                                </li>
                             </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="DropdownMenuDoctores" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Doctores
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="DropdownMenuDoctores">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Doctores" asp-action="Index">Lista de Doctores</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Doctores" asp-action="Create">Crear nuevo Doctor</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Doctores" asp-action="Index">
+                                        <i class="bi bi-person-lines-fill"></i> Doctores
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Doctores" asp-action="Create">
+                                        <i class="bi bi-person-plus-fill"></i> Nuevo Doctor
+                                    </a>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item" asp-area="" asp-controller="Especializaciones" asp-action="Index">
-                                        Especializaciónes
+                                        <i class="bi bi-card-list"></i> Especializaciónes
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" asp-area="" asp-controller="Especializaciones" asp-action="Create">
-                                        Crear nueva Especialización
+                                        <i class="bi bi-plus"></i> Nueva Especialización
                                     </a>
                                 </li>
                             </ul>
@@ -60,8 +70,16 @@
                                 Pacientes
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="DropdownMenuPacientes">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Pacientes" asp-action="Index">Lista de Pacientes</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Pacientes" asp-action="Create">Crear nuevo Paciente</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Pacientes" asp-action="Index">
+                                        <i class="bi bi-person-lines-fill"></i> Lista de Pacientes
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Pacientes" asp-action="Create">
+                                        <i class="bi bi-person-plus-fill"></i> Nuevo Paciente
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

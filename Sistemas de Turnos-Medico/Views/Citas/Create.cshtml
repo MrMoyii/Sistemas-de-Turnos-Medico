@@ -4,46 +4,61 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Cita</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
+<div style="max-width: 400px; margin: auto;">
+    <form asp-action="Create">
+        <h1>Crear</h1>
+        <div class="border border-secondary border-3 rounded text-center" style="padding: 5px; margin: 10px">
+            <h4>Cita</h4>
+            <hr />
+            <div class="row" style="margin-bottom: 1rem;">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col">
+                    <label asp-for="Fecha" class="control-label"></label>
+                    <input asp-for="Fecha" class="form-control" />
+                    <span asp-validation-for="Fecha" class="text-danger"></span>
+                </div>
+                <div class="form-group col">
+                    <label asp-for="Hora" class="control-label"></label>
+                    <input asp-for="Hora" class="form-control" />
+                    <span asp-validation-for="Hora" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Estado</label>
+                    <select asp-for="EstadoId" class="form-control" asp-items="ViewBag.Estado"></select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Doctor</label>
+                    <select asp-for="DoctorId" class="form-control" asp-items="ViewBag.Doctor"><a asp-area="" class="btn btn-success" asp-controller="Doctores" asp-action="Create"><i class="bi bi-person-plus-fill"></i></a></select>
+                    
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Paciente</label>
+                    <select asp-for="PacienteId" class="form-control" asp-items="ViewBag.Paciente"></select>
+                    <a asp-area="" class="btn btn-success" asp-controller="Pacientes" asp-action="Create"><i class="bi bi-person-plus-fill"></i></a>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Hora" class="control-label"></label>
-                <input asp-for="Hora" class="form-control" />
-                <span asp-validation-for="Hora" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Estado</label>
-                <select asp-for="EstadoId" class ="form-control" asp-items="ViewBag.Estado"></select>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Doctor</label>
-                <select asp-for="DoctorId" class="form-control" asp-items="ViewBag.Doctor"></select>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Paciente</label>
-                <select asp-for="PacienteId" class ="form-control" asp-items="ViewBag.Paciente"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="d-flex justify-content-evenly">
+            <button type="submit" class="btn btn-success"><i class="bi bi-plus-lg"></i> Crear Nuevo</button>
+            <a asp-action="Index" class="btn btn-dark"><i class="bi bi-caret-left"></i> Regresar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    /*.control-label {
+        float: left;
+        margin-left: 3.3rem;
+    }*/
+
+    .form-group {
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        text-align: center;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

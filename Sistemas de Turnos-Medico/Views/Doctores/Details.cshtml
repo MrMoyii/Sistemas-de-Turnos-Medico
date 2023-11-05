@@ -7,7 +7,9 @@
     <h1>Detalles</h1>
 
     <div class="border border-info border-3 rounded text-center" style="padding: 5px; margin: 10px">
-        <h4 class="text-info">Doctor</h4>
+        <h4 class="text-info" style="margin-top: 10px;">
+            Doctor/a
+        </h4>
         <hr />
         <dl class="row row-cols-2">
             <dt class = "col">
@@ -34,7 +36,7 @@
             <dd class = "col">
                 @if (!string.IsNullOrEmpty(Model.Foto))
                 {
-                    <img src="~/fotos/@Model.Foto" class="rounded-circle" style="max-width:50px" />
+                    <img src="~/fotos/@Model.Foto" class="rounded-circle" style="max-width:80px" />
                 }
             </dd>
             <dt class = "col">

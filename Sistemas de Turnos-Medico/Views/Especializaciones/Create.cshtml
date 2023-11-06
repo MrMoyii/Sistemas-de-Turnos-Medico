@@ -1,37 +1,46 @@
 ﻿@model Sistemas_de_Turnos_Medico.Models.Especializacion
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear";
 }
 
-<h1>Create</h1>
+<div style="max-width: 600px; margin: auto;">
+    <form asp-action="Create">
+        <h1>Crear</h1>
 
-<h4>Especializacion</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+        <div class="border border-success border-3 rounded text-center" style="padding: 10px; margin: 10px">
+            <h4 class="text-success" style="margin-top: 10px;">Especialización</h4>
+            <hr />
+            <div class="row" style="margin-bottom: 1rem;">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="input-group" style="max-width: 400px; margin: auto;">
+                    <span class="input-group-text" id="basic-addon1">Nombre</span>
+                    <input asp-for="Nombre" class="form-control" style="border-radius: 0px 4px 4px 0px;" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">Descripción</span>
+                    <textarea class="form-control" aria-label="With textarea" asp-for="Descripcion" style="border-radius: 0px 4px 4px 0px; min-height: 120px; text-align: start; max-height: 120px;"></textarea>
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="d-flex justify-content-evenly">
+            <button type="submit" class="btn btn-success"><i class="bi bi-plus-lg"></i> Crear Nuevo</button>
+            <a asp-action="Index" class="btn btn-dark"><i class="bi bi-caret-left"></i> Regresar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    .input-group {
+        margin-top: 0.75rem;
+    }
+
+    .form-control {
+        text-align: center;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

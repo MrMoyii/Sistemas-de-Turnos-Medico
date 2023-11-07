@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using Sistemas_de_Turnos_Medico.Data;
 using Sistemas_de_Turnos_Medico.Models;
 
@@ -20,6 +21,58 @@ namespace Sistemas_de_Turnos_Medico.Controllers
             _context = context;
             _env = env;
         }
+
+
+        public async Task<IActionResult> Importar(IFormFile archivoExcel)
+        {
+            if (archivoExcel != null && archivoExcel.Length > 0)
+            {
+                using (var package = new ExcelPackage(archivoExcel.OpenReadStream()))
+                {
+                    var workbook = package.Workbook;
+                    var worksheet = workbook.Worksheets.FirstOrDefault();
+
+                    int rowCount = worksheet.Dimension.End.Row;     //get row count
+
+                    List<Doctor> doctoressArch = new List<Doctor>();
+
+                    for (int row = 1; row <= rowCount; row++)
+                    {
+                        int salida;
+
+                        string idEspecializacion = worksheet.Cells[row, 4].Value?.ToString().Trim();
+
+                        int especializacion = (int.TryParse(idEspecializacion, out salida) ? salida : 0);
+                        if (especializacion > 0 && _context.Especializaciones.Where(c => c.Id == especializacion).FirstOrDefault() != null)
+                        {
+                            Doctor doctorTemporal = new Doctor()
+                            {
+                                EspecializacionId = especializacion,
+                                Nombre = worksheet.Cells[row, 1].Value?.ToString().Trim(),
+                                Apellido = worksheet.Cells[row, 2].Value?.ToString().Trim(),
+                                Celular = worksheet.Cells[row, 3].Value?.ToString().Trim(),
+                            };
+                            doctoressArch.Add(doctorTemporal);
+                        }
+                    }
+                    if (doctoressArch.Count > 0)
+                    {
+                        _context.Doctores.AddRange(doctoressArch);
+                        _context.SaveChanges();
+
+                        ViewBag.resultado = "Se subio archivo";
+                    }
+                    else
+                        ViewBag.resultado = "Error en el formato de archivo";
+                }
+            }
+            else
+                ViewBag.resultado = "Error en el archivo enviado";
+
+            var applicationDbContext = _context.Doctores.Include(a => a.Especializacion);
+            return View("Index", await applicationDbContext.ToListAsync());
+        }
+
 
         // GET: Doctores
         public async Task<IActionResult> Index()

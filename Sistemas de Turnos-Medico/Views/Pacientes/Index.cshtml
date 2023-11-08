@@ -3,8 +3,17 @@
 @{
     ViewData["Title"] = "Pacientes";
 }
-
+<p class="text-success bg-info">@ViewBag.resultado</p>
 <h1>Pacientes</h1>
+
+<div>
+    <form asp-controller="Pacientes" asp-action="Index">
+        <p>
+            Buscar: <input type="text" name="buscar" class="form-text" />
+            <input type="submit" value="Buscar" class="btn btn-sm btn-dark" />
+        </p>
+    </form>
+</div>
 
 <div style="display: flex; justify-content: start;">
     <p style="margin-right: 25px; min-width: 157px;">
@@ -21,13 +30,43 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroNombre"]" style="text-decoration: none;">
+                    @Html.DisplayNameFor(model => model.Nombre)
+                    @if(ViewData["FiltroNombre"] == "")
+                    {
+                        <i class="bi bi-caret-down-fill"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-caret-up-fill"></i>
+                    }
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Apellido)
+                <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroApellido"]" style="text-decoration: none;">
+                    @Html.DisplayNameFor(model => model.Apellido)
+                    @if (ViewData["FiltroApellido"] == "ApellidoAscendente")
+                    {
+                        <i class="bi bi-caret-down-fill"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-caret-up-fill"></i>
+                    }
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DNI)
+                <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroDNI"]" style="text-decoration: none;">
+                    @Html.DisplayNameFor(model => model.DNI)
+                    @if (ViewData["FiltroDNI"] == "DNIAscendente")
+                    {
+                        <i class="bi bi-caret-down-fill"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-caret-up-fill"></i>
+                    }
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Celular)

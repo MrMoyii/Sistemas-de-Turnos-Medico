@@ -72,11 +72,27 @@ namespace Sistemas_de_Turnos_Medico.Controllers
 
 
         // GET: Pacientes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? buscar, string ordenActual)
         {
-              return _context.Pacientes != null ? 
-                          View(await _context.Pacientes.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Pacientes'  is null.");
+            var pacientes = from paciente in _context.Pacientes select paciente;
+
+            if (!String.IsNullOrEmpty(buscar))
+                pacientes = pacientes.Where(p => p.Nombre.Contains(buscar));
+
+            ViewData["FiltroNombre"] = String.IsNullOrEmpty(ordenActual) ? "NombreDescendente" : "";
+            ViewData["FiltroApellido"] = ordenActual == "ApellidoAscendente" ? "ApellidoDescendente" : "ApellidoAscendente";
+            ViewData["FiltroDNI"] = ordenActual == "DNIAscendente" ? "DNIDescendente" : "DNIAscendente";
+
+            pacientes = ordenActual switch
+            {
+                "NombreDescendente" => pacientes.OrderByDescending(p => p.Nombre),
+                "ApellidoDescendente" => pacientes.OrderByDescending(p => p.Apellido),
+                "ApellidoAscendente" => pacientes.OrderBy(p => p.Apellido),
+                "DNIDescendente" => pacientes.OrderByDescending(p => p.DNI),
+                "DNIAscendente" => pacientes.OrderBy(p => p.DNI),
+                _ => pacientes.OrderBy(p => p.Nombre),
+            };
+            return View(await pacientes.ToListAsync());
         }
 
         // GET: Pacientes/Details/5

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using Sistemas_de_Turnos_Medico.Data;
 using Sistemas_de_Turnos_Medico.Models;
 
@@ -21,6 +22,54 @@ namespace Sistemas_de_Turnos_Medico.Controllers
             _context = context;
             _env = env;
         }
+
+
+        public async Task<IActionResult> Importar(IFormFile archivoExcel)
+        {
+            if (archivoExcel != null && archivoExcel.Length > 0)
+            {
+                using (var package = new ExcelPackage(archivoExcel.OpenReadStream()))
+                {
+                    var workbook = package.Workbook;
+                    var worksheet = workbook.Worksheets.FirstOrDefault();
+
+                    int rowCount = worksheet.Dimension.End.Row;     //get row count
+
+                    List<Paciente> pacientesArch = new List<Paciente>();
+
+                    for (int row = 1; row <= rowCount; row++)
+                    {
+                        int salida;
+                        if (row != 1)
+                        {
+                            Paciente pacienteTemporal = new Paciente()
+                            {
+                                Nombre = worksheet.Cells[row, 1].Value?.ToString().Trim(),
+                                Apellido = worksheet.Cells[row, 2].Value?.ToString().Trim(),
+                                DNI = int.TryParse(worksheet.Cells[row, 3].Value?.ToString().Trim(), out salida) ? salida : 0,
+                                Celular = worksheet.Cells[row, 4].Value?.ToString().Trim(),
+                            };
+                            pacientesArch.Add(pacienteTemporal);
+                        }
+                    }
+                    if (pacientesArch.Count > 0)
+                    {
+                        _context.Pacientes.AddRange(pacientesArch);
+                        _context.SaveChanges();
+
+                        ViewBag.resultado = "Se subio archivo";
+                    }
+                    else
+                        ViewBag.resultado = "Error en el formato de archivo";
+                }
+            }
+            else
+                ViewBag.resultado = "Error en el archivo enviado";
+
+            var applicationDbContext = _context.Pacientes;
+            return View("Index", await applicationDbContext.ToListAsync());
+        }
+
 
         // GET: Pacientes
         public async Task<IActionResult> Index()

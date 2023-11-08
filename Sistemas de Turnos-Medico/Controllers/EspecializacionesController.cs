@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using Sistemas_de_Turnos_Medico.Data;
 using Sistemas_de_Turnos_Medico.Models;
 
@@ -18,6 +19,50 @@ namespace Sistemas_de_Turnos_Medico.Controllers
         {
             _context = context;
         }
+
+
+        public async Task<IActionResult> Importar(IFormFile archivoExcel)
+        {
+            if (archivoExcel != null && archivoExcel.Length > 0)
+            {
+                using (var package = new ExcelPackage(archivoExcel.OpenReadStream()))
+                {
+                    var workbook = package.Workbook;
+                    var worksheet = workbook.Worksheets.FirstOrDefault();
+
+                    int rowCount = worksheet.Dimension.End.Row;     //get row count
+
+                    List<Especializacion> especializacionesArch = new List<Especializacion>();
+
+                    for (int row = 1; row <= rowCount; row++)
+                    {
+                        if(row != 1) {
+                            Especializacion especializacionTemporal = new Especializacion()
+                            {
+                                Nombre = worksheet.Cells[row, 1].Value?.ToString().Trim(),
+                                Descripcion = worksheet.Cells[row, 2].Value?.ToString().Trim(),
+                            };
+                            especializacionesArch.Add(especializacionTemporal);
+                        }
+                    }
+                    if (especializacionesArch.Count > 0)
+                    {
+                        _context.Especializaciones.AddRange(especializacionesArch);
+                        _context.SaveChanges();
+
+                        ViewBag.resultado = "Se subio archivo";
+                    }
+                    else
+                        ViewBag.resultado = "Error en el formato de archivo";
+                }
+            }
+            else
+                ViewBag.resultado = "Error en el archivo enviado";
+
+            var applicationDbContext = _context.Especializaciones;
+            return View("Index", await applicationDbContext.ToListAsync());
+        }
+
 
         // GET: Especializaciones
         public async Task<IActionResult> Index()

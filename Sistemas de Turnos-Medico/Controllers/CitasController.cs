@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Sistemas_de_Turnos_Medico.Models;
 
 namespace Sistemas_de_Turnos_Medico.Controllers
 {
+    [Authorize]
     public class CitasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,6 +21,7 @@ namespace Sistemas_de_Turnos_Medico.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         // GET: Citas
         public async Task<IActionResult> Index()
         {
@@ -26,6 +29,7 @@ namespace Sistemas_de_Turnos_Medico.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [AllowAnonymous]
         // GET: Citas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -180,7 +184,7 @@ namespace Sistemas_de_Turnos_Medico.Controllers
         #region Tools
         private SelectList ListDoctores(int citaId)
         {
-            List<Doctor> listaDoctores = _context.Doctores.Include(m => m.Especializacion).ToList();
+            List<Doctor> listaDoctores = _context.Doctores.Include(m => m.Especializacion).OrderBy(x => x.Apellido).ToList();
 
             List<SelectListItem> selectListItems = listaDoctores.Select(m => new SelectListItem
             {

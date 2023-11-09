@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using Sistemas_de_Turnos_Medico.ModelView;
 
 namespace Sistemas_de_Turnos_Medico.Controllers
 {
+    [Authorize]
     public class PacientesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,7 +27,7 @@ namespace Sistemas_de_Turnos_Medico.Controllers
         }
 
 
-        public async Task<IActionResult> Importar(IFormFile archivoExcel)
+        public IActionResult Importar(IFormFile archivoExcel)
         {
             if (archivoExcel != null && archivoExcel.Length > 0)
             {
@@ -68,10 +70,10 @@ namespace Sistemas_de_Turnos_Medico.Controllers
                 ViewBag.resultado = "Error en el archivo enviado";
 
             var applicationDbContext = _context.Pacientes;
-            return View("Index", await applicationDbContext.ToListAsync());
+            return RedirectToAction("Index", applicationDbContext.ToListAsync());
         }
 
-
+        [AllowAnonymous]
         // GET: Pacientes
         public async Task<IActionResult> Index(string? busqNombre, string? busqApellido, int? busqDNI, string ordenActual, string filtroActual, int pagina = 1)
         {
@@ -79,7 +81,7 @@ namespace Sistemas_de_Turnos_Medico.Controllers
 
             Paginador paginas = new Paginador();
             paginas.PaginaActual = pagina;
-            paginas.RegistrosPorPagina = 3;
+            paginas.RegistrosPorPagina = 5;
 
             //busquedas
             if (!String.IsNullOrEmpty(busqNombre))

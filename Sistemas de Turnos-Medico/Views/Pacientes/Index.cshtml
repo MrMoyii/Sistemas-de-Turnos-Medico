@@ -22,27 +22,27 @@
     </p>
     <label style="align-self: center; margin-right: 25px; margin-bottom: 1rem;">O</label>
     <form asp-action="Importar" enctype="multipart/form-data" class="input-group mb-3" sytle="margin-top: 10px; max-width: 620px;">
-        <span class="input-group-text" style="max-height: 50px; margin: auto;">Importar Pacientes por archivo CSV</span>
+        <span class="input-group-text" style="max-height: 50px; margin: auto;">Importar por excel</span>
         <input class="form-control" name="archivoExcel" id="archivoExcel" type="file" style="max-height: 50px; margin: auto;" />
         <input type="submit" value="Importar" class="btn btn-success" style="margin: auto; border-radius: 0px 4px 4px 0px;" />
     </form>
 </div>
-<div class="btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="10,20">
+<div class="btn-group dropend">
+    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="10,20">
         <i class="bi bi-filter-right"></i> Filtros
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="padding: 5px;">
         <li>
             <form style="min-width: 225px">
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <span class="input-group-text">Nombre</span>
                     <input type="text" class="form-control" name="busqNombre" placeholder="filtrar nombre" value="@Model.busqNombre" />
                 </div>
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <span class="input-group-text">Apellido</span>
                     <input type="text" class="form-control" name="busqApellido" placeholder="filtrar apellido" value="@Model.busqApellido" />
                 </div>
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <span class="input-group-text">DNI</span>
                     <input type="number" class="form-control" name="busqDNI" placeholder="filtrar DNI" value="@Model.busqDNI" />
                 </div>

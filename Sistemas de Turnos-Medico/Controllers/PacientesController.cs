@@ -73,7 +73,7 @@ namespace Sistemas_de_Turnos_Medico.Controllers
 
 
         // GET: Pacientes
-        public async Task<IActionResult> Index(string? busqNombre, string? busqApellido, int? busqDNI, string ordenActual, int pagina = 1)
+        public async Task<IActionResult> Index(string? busqNombre, string? busqApellido, int? busqDNI, string ordenActual, string filtroActual, int pagina = 1)
         {
             var pacientes = from paciente in _context.Pacientes select paciente;
 
@@ -81,6 +81,7 @@ namespace Sistemas_de_Turnos_Medico.Controllers
             paginas.PaginaActual = pagina;
             paginas.RegistrosPorPagina = 3;
 
+            //busquedas
             if (!String.IsNullOrEmpty(busqNombre))
             {
                 pacientes = pacientes.Where(p => p.Nombre.Contains(busqNombre));
@@ -99,6 +100,25 @@ namespace Sistemas_de_Turnos_Medico.Controllers
                 paginas.ValoresQueryString.Add("busqDNI", busqDNI.ToString());
             }
 
+            //ordenamiento de columnas
+            ViewData["OrdenActual"] = ordenActual;
+            ViewData["FiltroActual"] = filtroActual;
+
+            ViewData["FiltroNombre"] = String.IsNullOrEmpty(ordenActual) ? "NombreDescendente" : "";
+            ViewData["FiltroApellido"] = ordenActual == "ApellidoAscendente" ? "ApellidoDescendente" : "ApellidoAscendente";
+            ViewData["FiltroDNI"] = ordenActual == "DNIAscendente" ? "DNIDescendente" : "DNIAscendente";
+
+            pacientes = ordenActual switch
+            {
+                "NombreDescendente" => pacientes.OrderByDescending(p => p.Nombre),
+                "ApellidoDescendente" => pacientes.OrderByDescending(p => p.Apellido),
+                "ApellidoAscendente" => pacientes.OrderBy(p => p.Apellido),
+                "DNIDescendente" => pacientes.OrderByDescending(p => p.DNI),
+                "DNIAscendente" => pacientes.OrderBy(p => p.DNI),
+                _ => pacientes.OrderBy(p => p.Nombre),
+            };
+
+            //VM - paginacion
             paginas.TotalRegistros = pacientes.Count();
 
             var registrosMostrar = pacientes
@@ -113,22 +133,6 @@ namespace Sistemas_de_Turnos_Medico.Controllers
                 busqDNI = busqDNI,
                 paginador = paginas
             };
-
-            //ViewData["FiltroNombre"] = String.IsNullOrEmpty(ordenActual) ? "NombreDescendente" : "";
-            //ViewData["FiltroApellido"] = ordenActual == "ApellidoAscendente" ? "ApellidoDescendente" : "ApellidoAscendente";
-            //ViewData["FiltroDNI"] = ordenActual == "DNIAscendente" ? "DNIDescendente" : "DNIAscendente";
-
-            //pacientes = ordenActual switch
-            //{
-            //    "NombreDescendente" => pacientes.OrderByDescending(p => p.Nombre),
-            //    "ApellidoDescendente" => pacientes.OrderByDescending(p => p.Apellido),
-            //    "ApellidoAscendente" => pacientes.OrderBy(p => p.Apellido),
-            //    "DNIDescendente" => pacientes.OrderByDescending(p => p.DNI),
-            //    "DNIAscendente" => pacientes.OrderBy(p => p.DNI),
-            //    _ => pacientes.OrderBy(p => p.Nombre),
-            //};
-
-
 
             return View(datos);
         }

@@ -27,22 +27,40 @@
         <input type="submit" value="Importar" class="btn btn-success" style="margin: auto; border-radius: 0px 4px 4px 0px;" />
     </form>
 </div>
-<form>
-    Nombre:
-    <input type="text" placeholder="escribir nombre" name="busqNombre" value="@Model.busqNombre" />
-    Apellido:
-    <input type="text" name="busqApellido" value="@Model.busqApellido" />
-    DNI:
-    <input type="number" name="busqDNI" value="@Model.busqDNI" />
-
-    <input type="submit" value="Buscar" />
-    <input type="reset" value="Limpiar filtros" />
-</form>
+<div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="10,20">
+        <i class="bi bi-filter-right"></i> Filtros
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="padding: 5px;">
+        <li>
+            <form style="min-width: 225px">
+                <div class="input-group">
+                    <span class="input-group-text">Nombre</span>
+                    <input type="text" class="form-control" name="busqNombre" placeholder="filtrar nombre" value="@Model.busqNombre" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">Apellido</span>
+                    <input type="text" class="form-control" name="busqApellido" placeholder="filtrar apellido" value="@Model.busqApellido" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">DNI</span>
+                    <input type="number" class="form-control" name="busqDNI" placeholder="filtrar DNI" value="@Model.busqDNI" />
+                </div>
+                <div style="display: flex; justify-content: space-evenly; margin-top: 5px;">
+                    <input type="submit" class="btn btn-sm btn-primary" value="Buscar" />
+                    <a asp-action="Index" class="btn btn-sm btn-danger">Limpiar filtros</a>
+                </div>
+            </form>
+        </li>
+    </ul>
+</div>
 <table class="table text-center">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroNombre"]" style="text-decoration: none;">
+                <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroNombre"]"
+                   asp-route-filtroActual="@ViewData["FiltroActual"]" style="text-decoration: none;">
+
                     @Html.DisplayNameFor(model => model.pacientes[0].Nombre)
                     @if(ViewData["FiltroNombre"] == "")
                     {
@@ -55,7 +73,9 @@
                 </a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroApellido"]" style="text-decoration: none;">
+                <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroApellido"]"
+                   asp-route-filtroActual="@ViewData["FiltroActual"]" style="text-decoration: none;">
+
                     @Html.DisplayNameFor(model => model.pacientes[0].Apellido)
                     @if (ViewData["FiltroApellido"] == "ApellidoAscendente")
                     {
@@ -68,7 +88,9 @@
                 </a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroDNI"]" style="text-decoration: none;">
+                <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroDNI"]"
+                   asp-route-filtroActual="@ViewData["FiltroActual"]" style="text-decoration: none;">
+                    
                     @Html.DisplayNameFor(model => model.pacientes[0].DNI)
                     @if (ViewData["FiltroDNI"] == "DNIAscendente")
                     {

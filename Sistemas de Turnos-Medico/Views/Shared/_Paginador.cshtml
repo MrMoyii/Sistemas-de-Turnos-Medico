@@ -7,7 +7,10 @@ Total Registros: @Model.TotalRegistros
         @if (Model.PaginaActual != 1)
         {
             <li class="page-item @(Model.PaginaActual == 1 ? "disabled" : "")">
-                <a class="page-link" asp-all-route-data="@Model.ValoresQueryString" asp-route-pagina="@(Model.PaginaActual - 1)" tabindex="-1" aria-disabled="true">Anterior</a>
+                <a class="page-link" asp-all-route-data="@Model.ValoresQueryString" asp-route-pagina="@(Model.PaginaActual - 1)" tabindex="-1" aria-disabled="true"
+                   asp-route-ordenActual="@ViewData["OrdenActual"]" asp-route-filtroActual="@ViewData["FiltroActual"]">
+                    <i class="bi bi-arrow-left-circle-fill"></i>
+                </a>
             </li>
         }
         <li class="page-item active" aria-current="page">
@@ -15,15 +18,26 @@ Total Registros: @Model.TotalRegistros
         </li>
         @if (Model.TotalPaginas >= (Model.PaginaActual + 1))
         {
-            <li class="page-item"><a class="page-link" asp-all-route-data="@Model.ValoresQueryString" asp-route-pagina="@(Model.PaginaActual + 1)">@(Model.PaginaActual + 1)</a></li>
             <li class="page-item">
-                <a class="page-link" asp-all-route-data="@Model.ValoresQueryString" asp-route-pagina="@(Model.PaginaActual + 1)">Siguiente</a>
+                <a class="page-link" asp-all-route-data="@Model.ValoresQueryString" asp-route-pagina="@(Model.PaginaActual + 1)"
+                   asp-route-ordenActual="@ViewData["OrdenActual"]" asp-route-filtroActual="@ViewData["FiltroActual"]">
+                    @(Model.PaginaActual + 1)
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" asp-all-route-data="@Model.ValoresQueryString" asp-route-pagina="@(Model.PaginaActual + 1)"
+                   asp-route-ordenActual="@ViewData["OrdenActual"]" asp-route-filtroActual="@ViewData["FiltroActual"]">
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                </a>
             </li>
         }
         @if (Model.TotalPaginas > 1 && Model.PaginaActual < Model.TotalPaginas)
         {
             <li class="page-item">
-                <a class="page-link" asp-all-route-data="@Model.ValoresQueryString" asp-route-pagina="@(Model.TotalPaginas)">Ultima</a>
+                <a class="page-link" asp-all-route-data="@Model.ValoresQueryString" asp-route-pagina="@(Model.TotalPaginas)"
+                   asp-route-ordenActual="@ViewData["OrdenActual"]" asp-route-filtroActual="@ViewData["FiltroActual"]">
+                    Ultima
+                </a>
             </li>
         }
     </ul>

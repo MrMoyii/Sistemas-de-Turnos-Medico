@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using Sistemas_de_Turnos_Medico.Data;
 using Sistemas_de_Turnos_Medico.Models;
+using Sistemas_de_Turnos_Medico.ModelView;
 
 namespace Sistemas_de_Turnos_Medico.Controllers
 {
@@ -72,27 +73,64 @@ namespace Sistemas_de_Turnos_Medico.Controllers
 
 
         // GET: Pacientes
-        public async Task<IActionResult> Index(string? buscar, string ordenActual)
+        public async Task<IActionResult> Index(string? busqNombre, string? busqApellido, int? busqDNI, string ordenActual, int pagina = 1)
         {
             var pacientes = from paciente in _context.Pacientes select paciente;
 
-            if (!String.IsNullOrEmpty(buscar))
-                pacientes = pacientes.Where(p => p.Nombre.Contains(buscar));
+            Paginador paginas = new Paginador();
+            paginas.PaginaActual = pagina;
+            paginas.RegistrosPorPagina = 3;
 
-            ViewData["FiltroNombre"] = String.IsNullOrEmpty(ordenActual) ? "NombreDescendente" : "";
-            ViewData["FiltroApellido"] = ordenActual == "ApellidoAscendente" ? "ApellidoDescendente" : "ApellidoAscendente";
-            ViewData["FiltroDNI"] = ordenActual == "DNIAscendente" ? "DNIDescendente" : "DNIAscendente";
-
-            pacientes = ordenActual switch
+            if (!String.IsNullOrEmpty(busqNombre))
             {
-                "NombreDescendente" => pacientes.OrderByDescending(p => p.Nombre),
-                "ApellidoDescendente" => pacientes.OrderByDescending(p => p.Apellido),
-                "ApellidoAscendente" => pacientes.OrderBy(p => p.Apellido),
-                "DNIDescendente" => pacientes.OrderByDescending(p => p.DNI),
-                "DNIAscendente" => pacientes.OrderBy(p => p.DNI),
-                _ => pacientes.OrderBy(p => p.Nombre),
+                pacientes = pacientes.Where(p => p.Nombre.Contains(busqNombre));
+                paginas.ValoresQueryString.Add("busqNombre", busqNombre);
+            }
+
+            if (!String.IsNullOrEmpty(busqApellido))
+            {
+                pacientes = pacientes.Where(p => p.Nombre.Contains(busqApellido));
+                paginas.ValoresQueryString.Add("busqApellido", busqApellido);
+            }
+
+            if (busqDNI != null && busqDNI > 0)
+            {
+                pacientes = pacientes.Where(p => p.DNI.Equals(busqDNI));
+                paginas.ValoresQueryString.Add("busqDNI", busqDNI.ToString());
+            }
+
+            paginas.TotalRegistros = pacientes.Count();
+
+            var registrosMostrar = pacientes
+                        .Skip((pagina - 1) * paginas.RegistrosPorPagina)
+                        .Take(paginas.RegistrosPorPagina);
+
+            PacienteVM datos = new PacienteVM()
+            {
+                pacientes = registrosMostrar.ToList(),
+                busqNombre = busqNombre,
+                busqApellido = busqApellido,
+                busqDNI = busqDNI,
+                paginador = paginas
             };
-            return View(await pacientes.ToListAsync());
+
+            //ViewData["FiltroNombre"] = String.IsNullOrEmpty(ordenActual) ? "NombreDescendente" : "";
+            //ViewData["FiltroApellido"] = ordenActual == "ApellidoAscendente" ? "ApellidoDescendente" : "ApellidoAscendente";
+            //ViewData["FiltroDNI"] = ordenActual == "DNIAscendente" ? "DNIDescendente" : "DNIAscendente";
+
+            //pacientes = ordenActual switch
+            //{
+            //    "NombreDescendente" => pacientes.OrderByDescending(p => p.Nombre),
+            //    "ApellidoDescendente" => pacientes.OrderByDescending(p => p.Apellido),
+            //    "ApellidoAscendente" => pacientes.OrderBy(p => p.Apellido),
+            //    "DNIDescendente" => pacientes.OrderByDescending(p => p.DNI),
+            //    "DNIAscendente" => pacientes.OrderBy(p => p.DNI),
+            //    _ => pacientes.OrderBy(p => p.Nombre),
+            //};
+
+
+
+            return View(datos);
         }
 
         // GET: Pacientes/Details/5

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Sistemas_de_Turnos_Medico.Models.Paciente>
+﻿@*@model IEnumerable<Sistemas_de_Turnos_Medico.Models.Paciente>*@
+@model Sistemas_de_Turnos_Medico.ModelView.PacienteVM
 
 @{
     ViewData["Title"] = "Pacientes";
@@ -6,14 +7,14 @@
 <p class="text-success bg-info">@ViewBag.resultado</p>
 <h1>Pacientes</h1>
 
-<div>
+@*<div>
     <form asp-controller="Pacientes" asp-action="Index">
         <p>
             Buscar: <input type="text" name="buscar" class="form-text" />
             <input type="submit" value="Buscar" class="btn btn-sm btn-dark" />
         </p>
     </form>
-</div>
+</div>*@
 
 <div style="display: flex; justify-content: start;">
     <p style="margin-right: 25px; min-width: 157px;">
@@ -26,12 +27,23 @@
         <input type="submit" value="Importar" class="btn btn-success" style="margin: auto; border-radius: 0px 4px 4px 0px;" />
     </form>
 </div>
+<form>
+    Nombre:
+    <input type="text" placeholder="escribir nombre" name="busqNombre" value="@Model.busqNombre" />
+    Apellido:
+    <input type="text" name="busqApellido" value="@Model.busqApellido" />
+    DNI:
+    <input type="number" name="busqDNI" value="@Model.busqDNI" />
+
+    <input type="submit" value="Buscar" />
+    <input type="reset" value="Limpiar filtros" />
+</form>
 <table class="table text-center">
     <thead>
         <tr>
             <th>
                 <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroNombre"]" style="text-decoration: none;">
-                    @Html.DisplayNameFor(model => model.Nombre)
+                    @Html.DisplayNameFor(model => model.pacientes[0].Nombre)
                     @if(ViewData["FiltroNombre"] == "")
                     {
                         <i class="bi bi-caret-down-fill"></i>
@@ -44,7 +56,7 @@
             </th>
             <th>
                 <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroApellido"]" style="text-decoration: none;">
-                    @Html.DisplayNameFor(model => model.Apellido)
+                    @Html.DisplayNameFor(model => model.pacientes[0].Apellido)
                     @if (ViewData["FiltroApellido"] == "ApellidoAscendente")
                     {
                         <i class="bi bi-caret-down-fill"></i>
@@ -57,7 +69,7 @@
             </th>
             <th>
                 <a asp-action="Index" asp-route-ordenActual="@ViewData["FiltroDNI"]" style="text-decoration: none;">
-                    @Html.DisplayNameFor(model => model.DNI)
+                    @Html.DisplayNameFor(model => model.pacientes[0].DNI)
                     @if (ViewData["FiltroDNI"] == "DNIAscendente")
                     {
                         <i class="bi bi-caret-down-fill"></i>
@@ -69,16 +81,16 @@
                 </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Celular)
+                @Html.DisplayNameFor(model => model.pacientes[0].Celular)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Foto)
+                @Html.DisplayNameFor(model => model.pacientes[0].Foto)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.pacientes) {
         <tr style="vertical-align: middle;">
             <td>
                 @Html.DisplayFor(modelItem => item.Nombre)
@@ -113,6 +125,8 @@
 }
     </tbody>
 </table>
+
+<partial name="_Paginador" for="@Model.paginador" />
 
 <style>
     .eliminar {

@@ -65,7 +65,7 @@ namespace Sistemas_de_Turnos_Medico.Controllers
             return View("Index", await applicationDbContext.ToListAsync());
         }
 
-
+        [AllowAnonymous]
         // GET: Especializaciones
         public async Task<IActionResult> Index()
         {

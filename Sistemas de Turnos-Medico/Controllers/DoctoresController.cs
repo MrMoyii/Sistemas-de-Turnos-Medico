@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using Sistemas_de_Turnos_Medico.Data;
 using Sistemas_de_Turnos_Medico.Models;
+using Sistemas_de_Turnos_Medico.ModelView;
 
 namespace Sistemas_de_Turnos_Medico.Controllers
 {
@@ -72,15 +73,57 @@ namespace Sistemas_de_Turnos_Medico.Controllers
                 ViewBag.resultado = "Error en el archivo enviado";
 
             var applicationDbContext = _context.Doctores.Include(a => a.Especializacion);
-            return View("Index", await applicationDbContext.ToListAsync());
+            return RedirectToAction("Index", await applicationDbContext.ToListAsync());
         }
 
         [AllowAnonymous]
         // GET: Doctores
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? busqNombre, string? busqApellido, int? busqEspecializacion, int pagina = 1)
         {
-            var applicationDbContext = _context.Doctores.Include(d => d.Especializacion);
-            return View(await applicationDbContext.ToListAsync());
+            Paginador paginas = new Paginador();
+            paginas.PaginaActual = pagina;
+            paginas.RegistrosPorPagina = 5;
+
+            var applicationDbContext = _context.Doctores.Include(d => d.Especializacion).Select(e => e);
+
+            //busqueda Apellido Doctor
+            if (!String.IsNullOrEmpty(busqNombre))
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.Nombre.Contains(busqNombre));
+                paginas.ValoresQueryString.Add("busqApellido", busqNombre);
+            }
+            //busqueda Apellido Doctor
+            if (!String.IsNullOrEmpty(busqApellido))
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.Apellido.Contains(busqApellido));
+                paginas.ValoresQueryString.Add("busqApellido", busqApellido);
+            }
+            //busqueda Estado
+            if (busqEspecializacion != null)
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.Especializacion.Id.Equals(busqEspecializacion));
+                paginas.ValoresQueryString.Add("busqEspecializacion", busqEspecializacion.ToString());
+            }
+
+            //VM - paginacion
+            paginas.TotalRegistros = applicationDbContext.Count();
+
+            var registrosMostrar = applicationDbContext
+                        .Skip((pagina - 1) * paginas.RegistrosPorPagina)
+                        .Take(paginas.RegistrosPorPagina);
+
+            ViewData["Especializaciones"] = new SelectList(_context.Especializaciones, "Id", "Nombre");
+
+            DoctorVM datos = new DoctorVM()
+            {
+                Doctores = registrosMostrar.ToList(),
+                busqNombre = busqNombre,
+                busqApellido = busqApellido,
+                busqEspecializacion = busqEspecializacion,
+                paginador = paginas
+            };
+
+            return View(datos);
         }
 
         [AllowAnonymous]

@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Sistemas_de_Turnos_Medico.Data;
 using Sistemas_de_Turnos_Medico.Models;
+using Sistemas_de_Turnos_Medico.ModelView;
 
 namespace Sistemas_de_Turnos_Medico.Controllers
 {
@@ -23,10 +25,54 @@ namespace Sistemas_de_Turnos_Medico.Controllers
 
         [AllowAnonymous]
         // GET: Citas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? busqApellidoDoctor, string? busqApellidoPaciente, int? busqEstado, int pagina = 1)
         {
-            var applicationDbContext = _context.Citas.Include(c => c.Doctor).Include(c => c.Estado).Include(c => c.Paciente);
-            return View(await applicationDbContext.ToListAsync());
+            Paginador paginas = new Paginador();
+            paginas.PaginaActual = pagina;
+            paginas.RegistrosPorPagina = 5;
+
+            var applicationDbContext = _context.Citas.Include(c => c.Doctor).Include(c => c.Estado).Include(c => c.Paciente).Select(e => e);
+
+            //busqueda Apellido Doctor
+            if (!String.IsNullOrEmpty(busqApellidoDoctor))
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.Doctor.Apellido.Contains(busqApellidoDoctor));
+                paginas.ValoresQueryString.Add("busqApellidoDoctor", busqApellidoDoctor);
+            }
+            //busqueda Apellido Doctor
+            if (!String.IsNullOrEmpty(busqApellidoPaciente))
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.Paciente.Apellido.Contains(busqApellidoPaciente));
+                paginas.ValoresQueryString.Add("busqApellidoPaciente", busqApellidoPaciente);
+            }
+            //busqueda Estado
+            if (busqEstado != null)
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.Estado.Id.Equals(busqEstado));
+                paginas.ValoresQueryString.Add("busqEstado", busqEstado.ToString());
+            }
+
+            //VM - paginacion
+            paginas.TotalRegistros = applicationDbContext.Count();
+
+            var registrosMostrar = applicationDbContext
+                        .Skip((pagina - 1) * paginas.RegistrosPorPagina)
+                        .Take(paginas.RegistrosPorPagina);
+
+            ViewData["Estado"] = new SelectList(_context.Estados, "Id", "Descripcion");
+
+            CitaVM datos = new CitaVM()
+            {
+                Citas = registrosMostrar.ToList(),
+                ListDoctores = new SelectList(_context.Doctores, "Id", "Nombre"),
+                ListPacientes = new SelectList(_context.Pacientes, "Id", "Nombre"),
+                busqApellidoDoctor = busqApellidoDoctor,
+                busqApellidoPaciente = busqApellidoPaciente,
+                busqEstado = busqEstado,
+                paginador = paginas
+            };
+
+            return View(datos);
         }
 
         [AllowAnonymous]
